@@ -1,17 +1,17 @@
-import telebot                                                                                                          
-from telebot import types                                                                                               
-                                                                                                                        
-bot = telebot.TeleBot('5317785622:AAEBeSL514cNnvSW-Q_JZ1YPMfpBHbdBzWk')  # Создаем экземпляр бота                       
-                                                                                                                        
-                                                                                                                        
-# Функция, обрабатывающая команду /start                                                                                
-@bot.message_handler(commands=["start"])                                                                                
+import telebot
+import json
+from telebot import types
+
+bot = telebot.TeleBot('5317785622:AAEBeSL514cNnvSW-Q_JZ1YPMfpBHbdBzWk')  # Создаем экземпляр бота
+
+# Функция, обрабатывающая команду /start
+@bot.message_handler(commands=["start"])
 def start(message):                                                                                                     
     chat_id = message.chat.id                                                                                           
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)                                                            
-    btn1 = types.KeyboardButton("Начать игру")                                                                          
-    btn2 = types.KeyboardButton("Об игре")                                                                              
-    btn3 = types.KeyboardButton("Об авторе")                                                                            
+    markup = types.InlineKeyboardMarkup(resize_keyboard=True)                                                            
+    btn1 = types.InlineKeyboardButton("Начать игру")                                                                          
+    btn2 = types.InlineKeyboardButton("Об игре")                                                                              
+    btn3 = types.InlineKeyboardButton("Об авторе")                                                                            
     markup.add(btn1, btn2, btn3)                                                                                        
                                                                                                                         
     bot.send_message(chat_id,                                                                                           
@@ -26,26 +26,26 @@ def get_text_messages(message):
     ms_text = message.text                                                                                              
                                                                                                                         
     if ms_text == "Об игре" or ms_text == "Игра" or ms_text == "об игре" or ms_text == "игра":                          
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)                                                        
+        markup = types.InlineKeyboardMarkup(resize_keyboard=True)                                                        
         bot.send_message(chat_id, "Прототип игры-бродилки с уклоном в детектив")                                        
-        btn1 = types.KeyboardButton("Начать игру")                                                                      
-        btn2 = types.KeyboardButton("Об авторе")                                                                        
-        back = types.KeyboardButton("Назад")                                                                            
+        btn1 = types.InlineKeyboardButton("Начать игру")                                                                      
+        btn2 = types.InlineKeyboardButton("Об авторе")                                                                        
+        back = types.InlineKeyboardButton("Назад")                                                                            
         markup.add(btn1, btn2, back)                                                                                    
                                                                                                                         
     elif ms_text == "Об авторе" or ms_text == "Автор" or ms_text == "автор" or ms_text == "об авторе":                  
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)                                                        
+        markup = types.InlineKeyboardMarkup(resize_keyboard=True)                                                        
         bot.send_message(chat_id, "Автор немного устал и заколебался")                                                  
         img = open('vse-o-stile-nuar-2.jpg', 'rb')                                                                      
         bot.send_photo(message.chat.id, img)                                                                            
                                                                                                                         
-        btn1 = types.KeyboardButton("Начать игру")                                                                      
-        btn2 = types.KeyboardButton("Об авторе")                                                                        
-        back = types.KeyboardButton("Назад")                                                                            
+        btn1 = types.InlineKeyboardButton("Начать игру")                                                                      
+        btn2 = types.InlineKeyboardButton("Об авторе")                                                                        
+        back = types.InlineKeyboardButton("Назад")                                                                            
         markup.add(btn1, btn2, back)                                                                                    
                                                                                                                         
     elif ms_text == "Начать игру" or ms_text == "начать игру":                                                          
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)                                                        
+        markup = types.InlineKeyboardMarkup(resize_keyboard=True)                                                        
         bot.send_message(chat_id, 'США, конец 19 века. Время не спокойное, полное мафиозных разборок, сухого закона и ' 
                                   'романтизации убийств. Вы-незадачливый детектив в одном из городов, '                 
                                   'которым управляет мафия. Но кто же вы?')                                             
