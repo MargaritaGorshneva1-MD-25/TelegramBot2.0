@@ -15,7 +15,7 @@ def start(message):
     markup.add(btn1, btn2, btn3)                                                                                        
                                                                                                                         
     bot.send_message(chat_id,                                                                                           
-                     text="Привет, {0.first_name}! Я тестовый бот для курса программирования на языке ПаЙтон".format(   
+                     text="Добро пожаловать, {0.first_name}! Пора погрузиться в мир детектива, мафии и головоломок.".format(   
                          message.from_user), reply_markup=markup)                                                       
                                                                                                                         
                                                                                                                         
@@ -52,13 +52,29 @@ def get_text_messages(message):
         img = open("image.jpg", "rb")                                                                                   
         bot.send_photo(message.chat.id, img)                                                                            
         btn1 = types.InlineKeyboardButton(text="Мужчина")                                                               
-        btn2 = types.InlineKeyboardButton(text="Девушка")                                                               
-        markup.add(btn1, btn2)                                                                                          
+        btn2 = types.InlineKeyboardButton(text="Девушка")
+        btn3 = types.InlineKeyboardButton(text="Рандом")
+        markup.add(btn1, btn2, btn3)
+        
     elif ms_text == "Девушка" or ms_text == "девушка":                                                                  
         msg = bot.send_message(chat_id, "Как вас зовут?")                                                               
-        bot.register_next_step_handler(msg, ask)                                                                        
-                                                                                                                        
-                                                                                                                        
+        bot.register_next_step_handler(msg, ask)
+        
+    elif ms_text == "Рандом" or ms_text == "рандом":
+        msg = bot.send_message(chat_id, 'Новый день. Вы не так давно переехали в новый город и перевелись в другой департамент.' 
+                                  'Большой город кружил голову и вызывал некоторую детскую радость в душе. Но счастливые визги можно оставить на потом.'                 
+                                  'На новом рабочем месте уже есть работа. Но с чего вы начнёте день?')
+        btn1 = types.InlineKeyboardButton(text="Завтрак")                                                               
+        btn2 = types.InlineKeyboardButton(text="Подобрать гардероб")
+        btn3 = types.InlineKeyboardButton(text="Совет дня")
+        markup.add(btn1, btn2, btn3)
+        
+    elif ms_text == "Совет дня" or ms_text == "совет дня":
+        msg = bot.send_message(chat_id, "Вы берёте первую попавшуюся книгу или газет и наугад тыкаете пальцем в фразу. Хм, что же это значит?")
+        contents = requests.get("https://api.adviceslip.com/advice").json()
+        urlSOVET = contents["url"]
+        bot.send_message(message.chat.id, ms_text = urlSOVET)
+    
     else:                                                                                                               
         bot.send_message(chat_id, text="А енто зачем? Я не поняль " + ms_text)                                          
                                                                                                                         
