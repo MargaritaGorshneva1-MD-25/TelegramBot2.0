@@ -5,29 +5,30 @@ import requests
 
 bot = telebot.TeleBot('5317785622:AAEBeSL514cNnvSW-Q_JZ1YPMfpBHbdBzWk')  # Создаем экземпляр бота
 
+
 # Функция, обрабатывающая команду /start
 @bot.message_handler(commands=["start"])
-def start(message):                                                                                                     
+def start(message):
     chat_id = message.chat.id
 
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     btn1 = types.KeyboardButton("Начать игру")
     btn2 = types.KeyboardButton("Об игре")
     btn3 = types.KeyboardButton("Об авторе")
-    markup.add(btn1, btn2, btn3)                                                                                        
-                                                                                                                        
-    bot.send_message(chat_id,                                                                                           
-                     text="Добро пожаловать, {0.first_name}! Пора погрузиться в мир детектива, мафии и головоломок.".format(   
-                         message.from_user), reply_markup=markup)                                                       
-                                                                                                                        
-                                                                                                                        
-# Получение сообщений от юзера                                                                                          
-@bot.message_handler(content_types=['text'])                                                                            
-def get_text_messages(message):                                                                                         
-    chat_id = message.chat.id                                                                                           
-    ms_text = message.text                                                                                              
-                                                                                                                        
-    if ms_text == "Об игре" or ms_text == "Игра" or ms_text == "об игре" or ms_text == "игра":                          
+    markup.add(btn1, btn2, btn3)
+
+    bot.send_message(chat_id,
+                     text="Добро пожаловать, {0.first_name}! Пора погрузиться в мир детектива, мафии и головоломок.".format(
+                         message.from_user), reply_markup=markup)
+
+
+# Получение сообщений от юзера
+@bot.message_handler(content_types=['text'])
+def get_text_messages(message):
+    chat_id = message.chat.id
+    ms_text = message.text
+
+    if ms_text == "Об игре" or ms_text == "Игра" or ms_text == "об игре" or ms_text == "игра":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         btn1 = types.KeyboardButton("Начать игру")
         btn2 = types.KeyboardButton("Об авторе")
@@ -36,7 +37,7 @@ def get_text_messages(message):
 
         bot.send_message(chat_id, "Прототип игры-бродилки с уклоном в детектив", reply_markup=markup)
 
-    elif ms_text == "Об авторе" or ms_text == "Автор" or ms_text == "автор" or ms_text == "об авторе":                  
+    elif ms_text == "Об авторе" or ms_text == "Автор" or ms_text == "автор" or ms_text == "об авторе":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         btn1 = types.KeyboardButton("Начать игру")
         btn2 = types.KeyboardButton("Об игре")
@@ -45,51 +46,51 @@ def get_text_messages(message):
 
         img = open('vse-o-stile-nuar-2.jpg', "rb")
         bot.send_photo(message.chat.id, img, caption="Автор немного устал и заколебался", reply_markup=markup)
-                                                                                                                        
-    elif ms_text == "Начать игру" or ms_text == "начать игру":                                                          
+
+    elif ms_text == "Начать игру" or ms_text == "начать игру":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        btn1 = types.KeyboardButton(text="Мужчина")
-        btn2 = types.KeyboardButton(text="Девушка")
-        btn3 = types.KeyboardButton(text="Рандом")
-        markup.add(btn1, btn2, btn3)
+        btn1 = types.KeyboardButton(text="Далее")
+        markup.add(btn1)
+        msg = bot.send_message(chat_id, "Как вас зовут?")
+        bot.register_next_step_handler(msg, ask)
 
         img = open("image.jpg", "rb")
-        bot.send_photo(chat_id, img, caption='США, конец 19 века. Время не спокойное, полное мафиозных разборок, сухого закона и '
-                                  'романтизации убийств. Вы-незадачливый детектив в одном из городов, '
-                                  'которым управляет мафия. Но кто же вы?', reply_markup=markup)
+        bot.send_photo(chat_id, img,
+                       caption='США, конец 19 века. Время не спокойное, полное мафиозных разборок, сухого закона и '
+                               'романтизации убийств. Вы-незадачливый детектив в одном из городов, '
+                               'которым управляет мафия. Но кто же вы?', reply_markup=markup)
 
-    elif ms_text == "Девушка" or ms_text == "девушка":                                                                  
-        msg = bot.send_message(chat_id, "Как вас зовут?")                                                               
-        bot.register_next_step_handler(msg, ask)
-        
-    elif ms_text == "Рандом" or ms_text == "рандом":
+    elif ms_text == "Далее" or ms_text == "далее":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         btn1 = types.KeyboardButton(text="Завтрак")
         btn2 = types.KeyboardButton(text="Подобрать гардероб")
         btn3 = types.KeyboardButton(text="Совет дня")
         markup.add(btn1, btn2, btn3)
+        bot.send_message(chat_id,
+                         'Новый день. Вы не так давно переехали в новый город и перевелись в другой департамент.'
+                         'Большой город кружил голову и вызывал некоторую детскую радость в душе. Но счастливые '
+                         'визги можно оставить на потом. '
+                         'На новом рабочем месте уже есть работа. Но с чего вы начнёте день?',
+                         reply_markup=markup)
 
-        msg = bot.send_message(chat_id, 'Новый день. Вы не так давно переехали в новый город и перевелись в другой департамент.'
-                                        'Большой город кружил голову и вызывал некоторую детскую радость в душе. Но счастливые визги можно оставить на потом.'
-                                        'На новом рабочем месте уже есть работа. Но с чего вы начнёте день?', reply_markup=markup)
-        
     elif ms_text == "Совет дня" or ms_text == "совет дня":
         contents = requests.get("https://api.adviceslip.com/advice").json()
         urlSOVET = contents["slip"]["advice"]
-        # bot.send_message(message.chat.id, urlSOVET)
+        bot.send_message(chat_id, f"Вы берёте первую попавшуюся книгу или газет и наугад тыкаете пальцем в "
+                                  f"фразу. \n\n "
+                                  f"<b><i>{urlSOVET}</i></b> \n\n Хм, что же это значит?",
+                         parse_mode="HTML")
 
-        msg = bot.send_message(chat_id, f"Вы берёте первую попавшуюся книгу или газет и наугад тыкаете пальцем в фразу. \n\n <b><i>{urlSOVET}</i></b> \n\n Хм, что же это значит?", parse_mode="HTML")
-    
-    else:                                                                                                               
-        bot.send_message(chat_id, text="А енто зачем? Я не поняль " + ms_text)                                          
-                                                                                                                        
-                                                                                                                        
-def ask(message):                                                                                                       
-    chat_id = message.chat.id                                                                                           
-    ms_text = message.text                                                                                              
+    else:
+        bot.send_message(chat_id, text="А енто зачем? Я не поняль " + ms_text)
+
+
+def ask(message):
+    chat_id = message.chat.id
+    ms_text = message.text
     bot.send_message(chat_id, text="Приятно познакомиться, детектив " + ms_text)
-                                                                                                                        
-# -----------------------------------------------------------------------                                               
-bot.polling(none_stop=True, interval=0)  # Запускаем бота                                                               
-                                                                                                                        
+
+
+# -----------------------------------------------------------------------
+bot.polling(none_stop=True, interval=0)  # Запускаем бота
 print()
