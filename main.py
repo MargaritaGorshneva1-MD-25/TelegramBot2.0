@@ -1,5 +1,6 @@
 import telebot
 import json
+import Bot
 from telebot import types
 import requests
 
@@ -65,7 +66,8 @@ def get_text_messages(message):
         btn1 = types.KeyboardButton(text="Завтрак")
         btn2 = types.KeyboardButton(text="Подобрать гардероб")
         btn3 = types.KeyboardButton(text="Совет дня")
-        markup.add(btn1, btn2, btn3)
+        btn4 = types.KeyboardButton(text="Идти сразу на работу")
+        markup.add(btn1, btn2, btn3, btn4 )
         bot.send_message(chat_id,
                          'Новый день. Вы не так давно переехали в новый город и перевелись в другой департамент.'
                          'Большой город кружил голову и вызывал некоторую детскую радость в душе. Но счастливые '
@@ -75,11 +77,23 @@ def get_text_messages(message):
 
     elif ms_text == "Совет дня" or ms_text == "совет дня":
         contents = requests.get("https://api.adviceslip.com/advice").json()
-        urlSOVET = contents["slip"]["advice"]
+        url_SOVET = contents["slip"]["advice"]
         bot.send_message(chat_id, f"Вы берёте первую попавшуюся книгу или газет и наугад тыкаете пальцем в "
                                   f"фразу. \n\n "
-                                  f"<b><i>{urlSOVET}</i></b> \n\n Хм, что же это значит?",
+                                  f"<b><i>{ur_lSOVET}</i></b> \n\n Хм, что же это значит?",
                          parse_mode="HTML")
+
+    elif ms_text == "Идти сразу на работу" or ms_text == "идти сразу на работу":
+        bot.send_message(chat_id, "Вы спосокойно вышли из квартиры, но на лестничной площадке ваши соседи снова решили сыграть в карты. Они зовут вас сыграть. Присоединитесь?", reply_markup=markup)
+        btn1 = types.KeyboardButton(text="Присоединиться")
+        btn2 = types.KeyboardButton(text="Отказаться и уйти")
+        markup.add(btn1, btn2 )
+
+    elif ms_text == "Присоединиться" or ms_text == "присоединиться":
+        game21 = Bot.newGame(chat_id, botGames.Game21(jokers_enabled=True))  # создаём новый экземпляр игры
+        text_game = game21.get_cards(2)  # просим 2 карты в начале игры
+        bot.send_media_group(chat_id, media=game21.mediaCards)  # получим и отправим изображения карт
+        bot.send_message(chat_id, text=text_game)
 
     else:
         bot.send_message(chat_id, text="А енто зачем? Я не поняль " + ms_text)
